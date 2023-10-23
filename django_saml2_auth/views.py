@@ -163,7 +163,7 @@ def acs(r):
         return HttpResponseRedirect(get_reverse([denied, 'denied', 'django_saml2_auth:denied']))
 
     authn_response = saml_client.parse_authn_request_response(
-        resp, entity.BINDING_HTTP_POST)
+        resp, entity.BINDING_HTTP_POST, do_not_verify=settings.SAML2_AUTH.get('DO_NOT_VERIFY_RESPONSE', False))
     if authn_response is None:
         return HttpResponseRedirect(get_reverse([denied, 'denied', 'django_saml2_auth:denied']))
 
