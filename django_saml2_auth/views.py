@@ -176,6 +176,13 @@ def acs(r):
     user_first_name = user_identity[settings.SAML2_AUTH.get('ATTRIBUTES_MAP', {}).get('first_name', 'FirstName')][0]
     user_last_name = user_identity[settings.SAML2_AUTH.get('ATTRIBUTES_MAP', {}).get('last_name', 'LastName')][0]
 
+    if settings.SAML2_AUTH.get('ATTRIBUTES_CHINESE_ONLY'):
+        from services.person_service import PersonService
+        person_info = PersonService.get_person_by_chinese_name(chinese_name=user_identity['ChineseName'][0])
+        print(person_info)
+        user_first_name = person_info[0].get('first_name') if person_info else user_first_name
+        user_last_name = person_info[0].get('last_name') if person_info else user_last_name
+
     target_user = None
     is_new_user = False
 
